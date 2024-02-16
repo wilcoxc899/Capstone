@@ -14,3 +14,8 @@ while True:
     print("Temperature: %.2f C" % mpu.temperature)
     print("")
     time.sleep(0.1)
+
+MAXSIZE = 2000
+datafile = open('data.txt', 'w')
+for i in range(MAXSIZE):
+   datafile.write(f'{mpu.acceleration:0.3f} \t {mpu.gyro:0.3f} \t {mpu.temperature:0.3f}\n')
