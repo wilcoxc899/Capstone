@@ -29,9 +29,9 @@ def Motor_Speed(pca,percent):
 
 #initialization
 pca = Servo_Motor_Initialization()
-Motor_Start(pca)
+#Motor_Start(pca)
 
-Motor_Speed(pca, 0)   #stop/neutral position
+Motor_Speed(pca, 0.2)   #stop/neutral position
 time.sleep(2)
 Motor_Speed(pca, -0.15)   #reverse
 time.sleep(3)
