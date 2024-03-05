@@ -1,21 +1,26 @@
-import keyboard
+from pynput import keyboard
 import time
 
-def is_up_arrow_pressed():
-    return keyboard.is_pressed("up")
+class ArrowKeyDetector:
+    def __init__(self):
+        self.is_up_arrow_pressed = False
 
-def main():
-    previous_state = False
+    def on_press(self, key):
+        if key == keyboard.Key.up:
+            self.is_up_arrow_pressed = True
+            print("Up Arrow Pressed")
 
-    while True:
-        current_state = is_up_arrow_pressed()
+    def on_release(self, key):
+        if key == keyboard.Key.up:
+            self.is_up_arrow_pressed = False
+            print("Up Arrow Released")
 
-        if current_state != previous_state:
-            print(f"Up Arrow {'Pressed' if current_state else 'Released'}")
-            # Do something when the state changes, e.g., set a variable to True/False
-
-        previous_state = current_state
-        time.sleep(0.1)  # Adjust sleep duration as needed
+    def run(self):
+        with keyboard.Listener(on_press=self.on_press, on_release=self.on_release) as listener:
+            while True:
+                time.sleep(1)
 
 if __name__ == "__main__":
-    main()
+    detector = ArrowKeyDetector()
+    detector.run()
+
