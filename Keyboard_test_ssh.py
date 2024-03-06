@@ -5,6 +5,19 @@ from adafruit_pca9685 import PCA9685
 import time
 import adafruit_motor.servo
 import curses
+from board import SCL, SDA
+from adafruit_motor import servo
+from adafruit_pca9685 import PCA9685
+
+i2c =  busio.I2C(SCL,SDA)
+
+pca = PCA9685(i2c)
+
+pca.frequency = 100
+
+channel_num = 14
+
+servo7 = servo.Servo(pca.channels[channel_num])
 def Servo_Motor_Initialization():
    i2c_bus = busio.I2C(SCL,SDA)
    pca = PCA9685(i2c_bus)
@@ -29,7 +42,7 @@ def Motor_Speed(pca,percent):
 
 #initialization
 pca = Servo_Motor_Initialization()
-Motor_Start(pca)
+#Motor_Start(pca)
 # import curses
 
 # Get the curses window, turn off echoing of keyboard to screen, turn on
@@ -43,19 +56,21 @@ try:
         while True:   
             char = screen.getch()
             if char == ord('q'):
-                break
+                servo7.angle=90
             elif char == curses.KEY_UP:
-                print "up"
-                Motor_Speed(pca, 0.15)
+                print ("up")
+                Motor_Speed(pca,0.16)
             elif char == curses.KEY_DOWN:
-                print "down"
+                print ("down")
                 Motor_Speed(pca, 0)
             elif char == curses.KEY_RIGHT:
-                print "right"
+                print ("right")
+                servo7.angle = servo7.angle - 2
             elif char == curses.KEY_LEFT:
-                print "left"
+                print ("left")
+                servo7.angle=servo7.angle + 2
             elif char == 10:
-                print "stop"    
+                print ("stop")    
              
 finally:
     #Close down curses properly, inc turn echo back on!
