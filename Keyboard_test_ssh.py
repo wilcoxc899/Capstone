@@ -52,7 +52,6 @@ screen = curses.initscr()
 curses.noecho() 
 curses.cbreak()
 screen.keypad(True)
-
 try:
         while True:   
             char = screen.getch()
@@ -66,10 +65,10 @@ try:
                 Motor_Speed(pca, 0)
             elif char == curses.KEY_RIGHT:
                 print ("right")
-                servo7.angle = servo7.angle - 2
+                servo7.angle = 75
             elif char == curses.KEY_LEFT:
                 print ("left")
-                servo7.angle=servo7.angle + 2
+                servo7.angle =105
             elif char == 10:
                 print ("stop")    
              
