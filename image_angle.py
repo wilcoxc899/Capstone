@@ -1,25 +1,4 @@
 import cv2
-
-# Load the image
-image_path = 'test_image.jpg'  # Replace 'path_to_your_image.jpg' with the actual path to your image
-image = cv2.imread(image_path)
-
-# Check if the image is loaded successfully
-if image is not None:
-    # Call the findAngle function and pass the image as an argument
-    angle = findAngle(image)
-
-    # Print the calculated angle
-    print("Angle:", angle)
-
-    # Display the modified image with the circle drawn
-    cv2.imshow('Image with Circle', image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-else:
-    print("Error loading the image.")
-
-import cv2
 import numpy as np
 
 def findAngle(img, lower_hsv=(60, 50, 70), upper_hsv=(66, 255, 255)):
@@ -50,7 +29,7 @@ image = cv2.imread(image_path)
 # Check if the image is loaded successfully
 if image is not None:
     # Call the findAngle function with custom HSV values
-    angle = findAngle(image, lower_hsv=(60, 50, 70), upper_hsv=(66, 255, 255))
+    angle = findAngle(image, lower_hsv=(60, 50, 75), upper_hsv=(66, 255, 255))
 
     # Print the calculated angle
     print("Angle:", angle)
