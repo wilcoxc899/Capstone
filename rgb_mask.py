@@ -10,13 +10,16 @@ def findAngle(img_path, lower_rgb=(177, 182, 98), upper_rgb=(197, 202, 118), cir
 
     # Create a mask using RGB range
     mask = cv2.inRange(img, lower_rgb, upper_rgb)
-
+    cv2.imwrite('mask.jpg', mask)  # Debugging output: Save the mask image
+    
     # Blur the mask for smoothing
     mask_blur = cv2.blur(mask, (5, 5))
-
+    cv2.imwrite('mask_blur.jpg', mask_blur)  # Debugging output: Save the blurred mask image
+    
     # Apply threshold to create binary image
     _, thresh = cv2.threshold(mask_blur, 200, 255, cv2.THRESH_BINARY)
-
+    cv2.imwrite('thresh.jpg', thresh)  # Debugging output: Save the thresholded image
+   
     # Calculate moments of the binary image
     M = cv2.moments(thresh)
 
@@ -31,7 +34,8 @@ def findAngle(img_path, lower_rgb=(177, 182, 98), upper_rgb=(197, 202, 118), cir
 
     # Draw a red circle around the centroid
     img_with_circle = cv2.circle(img.copy(), (cX, cY), circle_radius, (0, 0, 255), circle_thickness)
-
+    cv2.imwrite('image_with_circle.jpg', img_with_circle)  # Debugging output: Save the image with circle
+    
     # Save the modified image with the circle drawn
     cv2.imwrite('image_with_circle.jpg', img_with_circle)
 
