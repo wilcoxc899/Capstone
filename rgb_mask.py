@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-def findAngle(img_path, lower_rgb=(0, 0, 0), upper_rgb=(255, 255, 255), circle_radius=40, circle_thickness=20):
+def findAngle(img_path, lower_rgb=(177, 182, 98), upper_rgb=(197, 202, 118), circle_radius=40, circle_thickness=20):
     # Load the image
     img = cv2.imread(img_path)
     if img is None:
