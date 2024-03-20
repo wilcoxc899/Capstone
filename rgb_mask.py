@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-def findAngle(img_path, lower_rgb=(177, 182, 98), upper_rgb=(197, 202, 118), circle_radius=40, circle_thickness=20):
+def findAngle(img_path, lower_rgb, upper_rgb, circle_radius=40, circle_thickness=20):
     # Load the image
     img = cv2.imread(img_path)
     if img is None:
@@ -46,11 +46,11 @@ def findAngle(img_path, lower_rgb=(177, 182, 98), upper_rgb=(197, 202, 118), cir
     return angle_deg
 
 # Specify the input image path
-image_path = 'test_image.jpg'
+image_path = 'jimmy.jpg'
 
-# Specify the RGB range for the mask (black color)
-lower_rgb = (0, 0, 0)
-upper_rgb = (50, 50, 50)
+# Specify the RGB range for the mask
+lower_rgb = (200, 100, 0)
+upper_rgb = (255, 160, 30)
 
 # Specify circle radius and thickness
 radius = 40
@@ -61,3 +61,4 @@ angle = findAngle(image_path, lower_rgb, upper_rgb, radius, thickness)
 
 # Print the calculated angle
 print("Angle:", angle)
+
