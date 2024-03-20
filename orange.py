@@ -17,13 +17,25 @@ mask = cv2.inRange(hsv_image, lower_orange, upper_orange)
 # Find contours in the mask
 contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-# Draw a red circle in the middle of each detected orange object
+# Initialize variables to store information about the largest circle
+largest_radius = 0
+largest_center = (0, 0)
+
+# Iterate through the contours to find the largest circle
 for contour in contours:
     # Get the center and radius of the contour
     (x, y), radius = cv2.minEnclosingCircle(contour)
     center = (int(x), int(y))
     radius = int(radius)
     
+    # Update the largest circle if the current circle is larger
+    if radius > largest_radius:
+        largest_radius = radius
+        largest_center = center
+
+# Draw the largest circle in the middle of the detected orange object
+if largest_radius > 0:
+    cv2.circle(image, largest_center, largest_radius, (0, 0, 255), 2)   
     # Draw the circle
     cv2.circle(image, center, radius, (0, 0, 255), 2)  # Red color, thickness=2
 
