@@ -1,0 +1,33 @@
+import cv2
+import numpy as np
+
+# Load the image
+image = cv2.imread('path/to/your/image.jpg')
+
+# Convert the image from BGR to HSV color space
+hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+
+# Define the lower and upper bounds of the orange color in HSV
+lower_orange = np.array([0, 100, 100])
+upper_orange = np.array([20, 255, 255])
+
+# Threshold the HSV image to get only orange colors
+mask = cv2.inRange(hsv_image, lower_orange, upper_orange)
+
+# Find contours in the mask
+contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+# Draw a red circle in the middle of each detected orange object
+for contour in contours:
+    # Get the center and radius of the contour
+    (x, y), radius = cv2.minEnclosingCircle(contour)
+    center = (int(x), int(y))
+    radius = int(radius)
+    
+    # Draw the circle
+    cv2.circle(image, center, radius, (0, 0, 255), 2)  # Red color, thickness=2
+
+# Show the original image with circles drawn on detected orange objects
+cv2.imshow('Orange Detection Result', image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
