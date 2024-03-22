@@ -43,5 +43,9 @@ if largest_radius > 0:
     print (center)
   # Red color, thickness=2
 
+#angle calculation from  center point
+angle=np.arctan(x/y) * 180 / np.pi 
+print(angle)
+
 # Show the original image with circles drawn on detected orange objects
 cv2.imwrite('Orange Detection Result.jpg', image)
