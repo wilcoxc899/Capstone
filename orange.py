@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 # Load the image
-image = cv2.imread('path/to/your/image.jpg')
+image = cv2.imread('jimmy.jpg')
 
 # Convert the image from BGR to HSV color space
 hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
@@ -27,19 +27,21 @@ for contour in contours:
     (x, y), radius = cv2.minEnclosingCircle(contour)
     center = (int(x), int(y))
     radius = int(radius)
+
     
     # Update the largest circle if the current circle is larger
     if radius > largest_radius:
         largest_radius = radius
         largest_center = center
+	
 
 # Draw the largest circle in the middle of the detected orange object
 if largest_radius > 0:
     cv2.circle(image, largest_center, largest_radius, (0, 0, 255), 2)   
     # Draw the circle
-    cv2.circle(image, center, radius, (0, 0, 255), 2)  # Red color, thickness=2
+    cv2.circle(image, center, radius, (0, 0, 255), 2)
+    print (center)
+  # Red color, thickness=2
 
 # Show the original image with circles drawn on detected orange objects
-cv2.imshow('Orange Detection Result', image)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+cv2.imwrite('Orange Detection Result.jpg', image)
