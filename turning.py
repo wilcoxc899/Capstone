@@ -57,20 +57,16 @@ try:
             char = screen.getch()
             if char == ord('q'):
                 servo7.angle=90
-            elif char == curses.KEY_UP:
-                print ("up")
-                Motor_Speed(pca,0.16)
-            elif char == curses.KEY_DOWN:
+            elif char == ord('w'):
+                print ("fwd")
+                Motor_Speed(pca,0.18)
+            elif char == ord('s'):
                 print ("down")
                 Motor_Speed(pca, 0)
             elif char == curses.KEY_RIGHT:
                 print ("right")
                 servo7.angle = 75
-            elif char == curses.KEY_LEFT:
-                print ("left")
-                servo7.angle=105
-            elif char == 10:
-                print ("stop")    
+            
              
 finally:
     #Close down curses properly, inc turn echo back on!
