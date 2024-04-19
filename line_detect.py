@@ -17,25 +17,25 @@ edges = cv2.Canny(blurred, 50, 150)
 lines = cv2.HoughLinesP(edges, 1, np.pi/180, threshold=100, minLineLength=100, maxLineGap=10)
 
 # Filter lines to keep only those likely to be sidewalk edges
-#filtered_lines = []
-#if lines is not None:
-    #for line in lines:
-        #x1, y1, x2, y2 = line[0]
+filtered_lines = []
+if lines is not None:
+    for line in lines:
+        x1, y1, x2, y2 = line[0]
         # Filter lines based on criteria such as orientation and position within the image
-        #angle = np.arctan2(y2 - y1, x2 - x1) * 180 / np.pi
+        angle = np.arctan2(y2 - y1, x2 - x1) * 180 / np.pi
         # Filter out lines that are not approximately horizontal and are near the bottom of the image
-        #if abs(angle) < 20 and min(y1, y2) > 0.8 * image.shape[0]:
+        if abs(angle) < 20 and min(y1, y2) > 0.8 * image.shape[0]:
            #filtered_lines.append(line)
 
 # Identify potential endpoints of the sidewalk
-#endpoints = []
-#if filtered_lines:
-    #for line in filtered_lines:
-        #x1, y1, x2, y2 = line[0]
+endpoints = []
+if filtered_lines:
+    for line in filtered_lines:
+        x1, y1, x2, y2 = line[0]
         # Check if the line extends to the edge of the image
-        #if x1 == 0 or x2 == 0 or x1 == image.shape[1] - 1 or x2 == image.shape[1] - 1:
-            #endpoints.append((x1, y1))
-            #endpoints.append((x2, y2))
+        if x1 == 0 or x2 == 0 or x1 == image.shape[1] - 1 or x2 == image.shape[1] - 1:
+            endpoints.append((x1, y1))
+            endpoints.append((x2, y2))
 
 # Draw detected lines and endpoints on the original image
 if lines is not None:
