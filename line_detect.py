@@ -25,7 +25,7 @@ if lines is not None:
         angle = np.arctan2(y2 - y1, x2 - x1) * 180 / np.pi
         # Filter out lines that are not approximately horizontal and are near the bottom of the image
         if abs(angle) > 75
-           #filtered_lines.append(line)
+           filtered_lines.append(line)
 
 # Identify potential endpoints of the sidewalk
 endpoints = []
