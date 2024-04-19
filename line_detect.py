@@ -21,29 +21,17 @@ filtered_lines = []
 if lines is not None:
     for line in lines:
         x1, y1, x2, y2 = line[0]
-        # Filter lines based on criteria such as orientation and position within the image
+        # take an angle to be used later
         angle = np.arctan2(y2 - y1, x2 - x1) * 180 / np.pi
-        # Filter out lines that are not approximately horizontal and are near the bottom of the image
-        if abs(angle) > 75
+        # Filter out lines that are not in the left half
+        if (x1,x2)< 0.5*image.shape[1]
            filtered_lines.append(line)
-
-# Identify potential endpoints of the sidewalk
-endpoints = []
-if filtered_lines:
-    for line in filtered_lines:
-        x1, y1, x2, y2 = line[0]
-        # Check if the line extends to the edge of the image
-        if x1 == 0 or x2 == 0 or x1 == image.shape[1] - 1 or x2 == image.shape[1] - 1:
-            endpoints.append((x1, y1))
-            endpoints.append((x2, y2))
 
 # Draw detected lines and endpoints on the original image
 if lines is not None:
     for line in lines:
         x1, y1, x2, y2 = line[0]
         cv2.line(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
-    for endpoint in endpoints:
-        cv2.circle(image, endpoint, 5, (0, 0, 255), -1)
 
 # Display the result
 cv2.imshow('Sidewalk Endpoint Detection', image)
