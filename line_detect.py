@@ -1,8 +1,24 @@
 import cv2
 import numpy as np
 
+# open camera
+cap = cv2.VideoCapture('/dev/video0', cv2.CAP_V4L)
+
+# set dimensions
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 2560)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 256)
+
+# take frame
+ret, frame = cap.read()
+# write frame to file
+cv2.imwrite('awesome.jpg', frame)
+# release camera
+cap.release()
 # Load the image
-image = cv2.imread('straight_cropped')
+img = cv2.imread('awesome.jpg')
+
+# FLip the image
+image = cv2.flip(img, -1)
 
 # Convert the image to grayscale
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -34,6 +50,6 @@ if lines is not None:
         cv2.line(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
 
 # Display the result
-cv2.imshow('Sidewalk Endpoint Detection', image)
+cv2.imwrite('Sidewalk Endpoint Detection.jpg', image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
