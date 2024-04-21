@@ -25,6 +25,8 @@ pca = PCA9685(i2c)
 pca.frequency = 100
 channel_num = 14
 servo7 = servo.Servo(pca.channels[channel_num])
+array = []
+
 
 #def Servo_Motor_Initialization():
 #   i2c_bus = busio.I2C(SCL,SDA)
@@ -101,7 +103,10 @@ def call_imu(data):
             file.write(f'{timestamp}, {ax}, {ay}, {az}\n')
         #control loop
         error=setpoint-az
-        integ +=error
+        array.apend(error)
+        if len(array)>100:
+           array.pop(0)
+        integ = sum(array)
         der= error-prev_der
         output = (p*error)+(i*integ)+(d*der)
         #steering
