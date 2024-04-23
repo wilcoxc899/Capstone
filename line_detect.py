@@ -15,7 +15,7 @@ import numpy as np
 # release camera
 #cap.release()
 # Load the image
-image = cv2.imread('halfrightcropped.jpg')
+image = cv2.imread('straight_cropped2.jpg')
 
 # Flip the image
 #image = cv2.flip(img, -1)
@@ -25,32 +25,33 @@ image = cv2.imread('halfrightcropped.jpg')
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 # Apply Gaussian blur to reduce noise
-blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+blurred = cv2.GaussianBlur(gray, (1, 1), 0)
 
 # Perform edge detection using Canny
 edges = cv2.Canny(blurred, 50, 150)
 
 # Perform Hough line detection
-lines = cv2.HoughLinesP(edges, 1, np.pi/180, threshold=100, minLineLength=100, maxLineGap=20)
+lines = cv2.HoughLinesP(edges, 1, np.pi/180, threshold=100, minLineLength=100, maxLineGap=50)
 
 # Filter lines to keep only those likely to be sidewalk edges
-filteredleft_lines= [1]
-filteredright_lines= [1]
+filteredleft_lines= []
+filteredright_lines= []
 if lines is not None:
     max_length=0
     for line in lines:
         x1, y1, x2, y2 = line[0]
         # take an angle to be used later
-        #slope=(int(y2) -int(y1))/(int(x2) - int(x1))
+        angle_rad=np.arctan2(y2-y1,x2-x1)
+        angle=np.degrees(angle_rad)
         # Filter out lines that are not in the left half
-        if min(x1,x2)> 0.5*image.shape[1]:
+        if min(x1,x2)> 0.5*image.shape[1] and max(y1,y2)>0.5*image.shape[0]:
             max_length=0
             if len(line) > 0:
                 #filteredright_lines.pop(0)
                 longest_line = line
                 max_length = len(longest_line)
                 filteredright_lines.append(longest_line)
-        elif max(x1,x2)<0.5*image.shape[1]:
+        elif max(x1,x2)<0.5*image.shape[1] and max(y1,y2)>0.5*image.shape[0]:
             max_length=0
             if len(line) > 0:
                 #filteredleft_lines.pop(0)
@@ -63,17 +64,22 @@ if lines is not None:
     for line in filteredleft_lines:
         x1, y1, x2, y2 = line[0]
         cv2.line(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
-        #leftmax_x=x2
-        #leftmax_y=y2
+        left_x1 += x1
+        left_x2 += x2
+        left_y1 += y1
+        left_y2 += y2
     for line in filteredright_lines:
         x1, y1, x2, y2 = line[0]
         cv2.line(image, (x1, y1), (x2, y2), (255, 0, 0), 2)
-        #rightmax_x=x2
-        #rightmax_y=y2
+        right_x1 += x1
+        right_x2 += x2
+        right_y1 += y1
+        right_y2 += y2
+    
     #mid_x=(leftmax_x+rightmax_x)/2
     #mid_y=(leftmax_y+rightmax_y)/2
     #point=(int(mid_x),int(mid_y))
-    #color=(0,255,0)
+    #color=(0,0,255)
     #cv2.circle(image,point,20,color,-1)
 
 # Display the result
