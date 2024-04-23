@@ -15,7 +15,7 @@ import numpy as np
 # release camera
 #cap.release()
 # Load the image
-image = cv2.imread('straight_cropped2.jpg')
+image = cv2.imread('halfrightcropped.jpg')
 
 # Flip the image
 #image = cv2.flip(img, -1)
@@ -25,13 +25,13 @@ image = cv2.imread('straight_cropped2.jpg')
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 # Apply Gaussian blur to reduce noise
-blurred = cv2.GaussianBlur(gray, (1, 1), 0)
+blurred = cv2.GaussianBlur(gray, (1,1), 0)
 
 # Perform edge detection using Canny
-edges = cv2.Canny(blurred, 50, 150)
+edges = cv2.Canny(blurred, 100, 200)
 
 # Perform Hough line detection
-lines = cv2.HoughLinesP(edges, 1, np.pi/180, threshold=100, minLineLength=100, maxLineGap=50)
+lines = cv2.HoughLinesP(edges, 1, np.pi/180, threshold=100, minLineLength=100, maxLineGap=100)
 
 # Filter lines to keep only those likely to be sidewalk edges
 filteredleft_lines= []
@@ -44,21 +44,28 @@ if lines is not None:
         angle_rad=np.arctan2(y2-y1,x2-x1)
         angle=np.degrees(angle_rad)
         # Filter out lines that are not in the left half
-        if min(x1,x2)> 0.5*image.shape[1] and max(y1,y2)>0.5*image.shape[0]:
+        if min(x1,x2)> 0.5*image.shape[1]:
             max_length=0
             if len(line) > 0:
                 #filteredright_lines.pop(0)
                 longest_line = line
                 max_length = len(longest_line)
                 filteredright_lines.append(longest_line)
-        elif max(x1,x2)<0.5*image.shape[1] and max(y1,y2)>0.5*image.shape[0]:
+        elif max(x1,x2)<0.5*image.shape[1]:
             max_length=0
             if len(line) > 0:
                 #filteredleft_lines.pop(0)
                 longest_line = line
                 max_length = len(longest_line)
                 filteredleft_lines.append(longest_line)
-
+left_x1=0
+left_x2=0
+left_y1=0
+left_y2=0
+right_x1=0
+right_x2=0
+right_y1=0
+right_y2=0
 # Draw detected lines and endpoints on the original image
 if lines is not None:
     for line in filteredleft_lines:
