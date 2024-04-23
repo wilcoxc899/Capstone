@@ -76,11 +76,19 @@ if lines is not None:
         right_y1 += y1
         right_y2 += y2
     
-    #mid_x=(leftmax_x+rightmax_x)/2
-    #mid_y=(leftmax_y+rightmax_y)/2
-    #point=(int(mid_x),int(mid_y))
-    #color=(0,0,255)
-    #cv2.circle(image,point,20,color,-1)
+    left_avg_x1=left_x1/len(filteredleft_lines)
+    left_avg_x2=left_x2/len(filteredleft_lines)
+    left_avg_y1=left_y1/len(filteredleft_lines)
+    left_avg_y2=left_y2/len(filteredleft_lines)
+    right_avg_x1=right_x1/len(filteredright_lines)
+    right_avg_x2=right_x2/len(filteredright_lines)
+    right_avg_y1=right_y1/len(filteredright_lines)
+    right_avg_y2=right_y2/len(filteredright_lines)
+    mid_x=(left_avg_x2+right_avg_x2)/2
+    mid_y=(left_avg_y2+right_avg_y2)/2
+    point=(int(mid_x),int(mid_y))
+    color=(0,0,255)
+    cv2.circle(image,point,20,color,-1)
 
 # Display the result
 cv2.imwrite('Sidewalk Endpoint Detection.jpg', image)
