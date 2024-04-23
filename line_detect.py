@@ -22,13 +22,22 @@ image = cv2.imread('halfrightcropped.jpg')
 
 
 # Convert the image to grayscale
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+#gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 # Apply Gaussian blur to reduce noise
-blurred = cv2.GaussianBlur(gray, (1,1), 0)
+#blurred = cv2.GaussianBlur(gray, (1,1), 0)
 
 # Perform edge detection using Canny
-edges = cv2.Canny(blurred, 100, 200)
+image = cv2.Canny(blurred, 100, 200)
+
+hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+	
+	# Define the lower and upper bounds of the orange color in HSV
+lower_green = np.array([80, 36, 72])
+upper_green = np.array([20, 255, 255])
+	
+	# Threshold the HSV image to get only orange colors
+	mask = cv2.inRange(hsv_image, lower_orange, upper_orange)
 
 # Perform Hough line detection
 lines = cv2.HoughLinesP(edges, 1, np.pi/180, threshold=100, minLineLength=100, maxLineGap=100)
