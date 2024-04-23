@@ -36,6 +36,7 @@ lines = cv2.HoughLinesP(edges, 1, np.pi/180, threshold=100, minLineLength=100, m
 filteredleft_lines = []
 filteredright_lines= []
 if lines is not None:
+    max_length=0
     for line in lines:
         x1, y1, x2, y2 = line[0]
         # take an angle to be used later
@@ -43,24 +44,23 @@ if lines is not None:
         # Filter out lines that are not in the left half
         if min(x1,x2)< 0.5*image.shape[1]:
             max_length=0
-            for lines in lines:
-                if len(line) > max_length:
-                    longest_line = line
-                    max_length = len(line)
-                    filteredleft_lines.append(line)
-        else:
-            max_length=0
-            for lines in lines:
-                if len(line) > max_length:
-                    longest_line = line
-                    max_length = len(line)
-                    filteredright_lines.append(line)
+            if len(line) > max_length:
+            longest_line = line
+            max_length = len(line)
+            filteredright_lines.append(line)
+        #else:
+            #max_length=0
+            #for lines in lines:
+                #if len(line) > max_length:
+                    #longest_line = line
+                    #max_length = len(line)
+                    #filteredright_lines.append(line)
 
 # Draw detected lines and endpoints on the original image
 if lines is not None:
-    for line in filteredleft_lines:
-        x1, y1, x2, y2 = line[0]
-        cv2.line(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
+    #for line in filteredleft_lines:
+        #x1, y1, x2, y2 = line[0]
+        #cv2.line(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
     for line in filteredright_lines:
         x1, y1, x2, y2 = line[0]
         cv2.line(image, (x1, y1), (x2, y2), (255, 0, 0), 2)
