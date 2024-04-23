@@ -63,17 +63,17 @@ if lines is not None:
     for line in filteredleft_lines:
         x1, y1, x2, y2 = line[0]
         cv2.line(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
-        leftmax_x=x2
-        leftmax_y=y2
+        #leftmax_x=x2
+        #leftmax_y=y2
     for line in filteredright_lines:
         x1, y1, x2, y2 = line[0]
         cv2.line(image, (x1, y1), (x2, y2), (255, 0, 0), 2)
-        rightmax_x=x2
-        rightmax_y=y2
-    mid_x=(leftmax_x+rightmax_x)/2
-    mid_y=(leftmax_y+rightmax_y)/2
+        #rightmax_x=x2
+        #rightmax_y=y2
+    #mid_x=(leftmax_x+rightmax_x)/2
+    #mid_y=(leftmax_y+rightmax_y)/2
     #point=(int(mid_x),int(mid_y))
-    color=(0,255,0)
+    #color=(0,255,0)
     #cv2.circle(image,point,20,color,-1)
 
 # Display the result
