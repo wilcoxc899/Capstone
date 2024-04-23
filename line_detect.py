@@ -2,23 +2,23 @@ import cv2
 import numpy as np
 
 # open camera
-cap = cv2.VideoCapture('/dev/video0', cv2.CAP_V4L)
+#cap = cv2.VideoCapture('/dev/video0', cv2.CAP_V4L)
 
 # set dimensions
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 2560)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 256)
+#cap.set(cv2.CAP_PROP_FRAME_WIDTH, 2560)
+#cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 256)
 
 # take frame
-ret, frame = cap.read()
+#ret, frame = cap.read()
 # write frame to file
-cv2.imwrite('awesome.jpg', frame)
+#cv2.imwrite('awesome.jpg', frame)
 # release camera
-cap.release()
+#cap.release()
 # Load the image
-img = cv2.imread('awesome.jpg')
+image = cv2.imread('straight_cropped2.jpg')
 
 # FLip the image
-image = cv2.flip(img, -1)
+#image = cv2.flip(img, -1)
 
 # Convert the image to grayscale
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -33,7 +33,8 @@ edges = cv2.Canny(blurred, 50, 150)
 lines = cv2.HoughLinesP(edges, 1, np.pi/180, threshold=100, minLineLength=100, maxLineGap=10)
 
 # Filter lines to keep only those likely to be sidewalk edges
-filtered_lines = []
+filteredleft_lines = []
+filteredright_lines= []
 if lines is not None:
     for line in lines:
         x1, y1, x2, y2 = line[0]
