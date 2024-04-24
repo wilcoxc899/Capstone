@@ -15,29 +15,20 @@ import numpy as np
 # release camera
 #cap.release()
 # Load the image
-image = cv2.imread('halfrightcropped.jpg')
+image = cv2.imread('driving.jpg')
 
 # Flip the image
 #image = cv2.flip(img, -1)
 
 
 # Convert the image to grayscale
-#gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 # Apply Gaussian blur to reduce noise
-#blurred = cv2.GaussianBlur(gray, (1,1), 0)
+blurred = cv2.GaussianBlur(gray, (7,7), 0)
 
 # Perform edge detection using Canny
-image = cv2.Canny(blurred, 100, 200)
-
-hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-	
-	# Define the lower and upper bounds of the orange color in HSV
-lower_green = np.array([80, 36, 72])
-upper_green = np.array([20, 255, 255])
-	
-	# Threshold the HSV image to get only orange colors
-	mask = cv2.inRange(hsv_image, lower_orange, upper_orange)
+edges = cv2.Canny(blurred, 100, 150)
 
 # Perform Hough line detection
 lines = cv2.HoughLinesP(edges, 1, np.pi/180, threshold=100, minLineLength=100, maxLineGap=100)
@@ -53,14 +44,14 @@ if lines is not None:
         angle_rad=np.arctan2(y2-y1,x2-x1)
         angle=np.degrees(angle_rad)
         # Filter out lines that are not in the left half
-        if min(x1,x2)> 0.5*image.shape[1]:
+        if min(x1,x2)> 0.5*image.shape[1] and min(y1,y2)>0.01*image.shape[0]:
             max_length=0
             if len(line) > 0:
                 #filteredright_lines.pop(0)
                 longest_line = line
                 max_length = len(longest_line)
                 filteredright_lines.append(longest_line)
-        elif max(x1,x2)<0.5*image.shape[1]:
+        elif max(x1,x2)<0.5*image.shape[1] and min(y1,y2)>0.01*image.shape[0]:
             max_length=0
             if len(line) > 0:
                 #filteredleft_lines.pop(0)
@@ -91,7 +82,6 @@ if lines is not None:
         right_x2 += x2
         right_y1 += y1
         right_y2 += y2
-    
     left_avg_x1=left_x1/len(filteredleft_lines)
     left_avg_x2=left_x2/len(filteredleft_lines)
     left_avg_y1=left_y1/len(filteredleft_lines)
@@ -100,7 +90,7 @@ if lines is not None:
     right_avg_x2=right_x2/len(filteredright_lines)
     right_avg_y1=right_y1/len(filteredright_lines)
     right_avg_y2=right_y2/len(filteredright_lines)
-    mid_x=(left_avg_x2+right_avg_x2)/2
+    mid_x=(left_avg_x2+right_avg_x1)/2
     mid_y=(left_avg_y2+right_avg_y2)/2
     point=(int(mid_x),int(mid_y))
     color=(0,0,255)
