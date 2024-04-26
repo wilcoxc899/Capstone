@@ -1,12 +1,11 @@
 import os
 import time
-from math import cos, sin, pi, floor
+from math import cos, sin, pi, floor, atan
 from adafruit_rplidar import RPLidar
 from board import SCL, SDA
 import busio
 from adafruit_motor import servo
 from adafruit_pca9685 import PCA9685
-import math
 
 # servo stuff
 i2c = busio.I2C(SCL,SDA)
@@ -19,44 +18,47 @@ servo7 = servo.Servo(pca.channels[channel_num])
 PORT_NAME = '/dev/ttyUSB0'
 lidar = RPLidar(None, PORT_NAME, timeout=3)
 
-max_distance = 0
-stack = []
+# parameters
+theta = 55
+L = 100
+kp = 1
+ki = 0.5
+kd = 0.1
+pre_error = 0
+integral = 0
+
 def Motor_Speed(pca,percent):
     speed = ((percent)*3277) + 65535*0.15
-    pca.channels[15].duty_cycle = math.floor(speed)
+    pca.channels[15].duty_cycle = floor(speed)
 
 
-def print_lidar_data(data):
-    with open('lidarreadings.txt', 'w') as f:
-        for angle, distance in enumerate(data):
+def all_sensors(data):
+    for angle, distance in enumerate(data):
+        b = scan_data[270] # distance at zero angle relative to the car's x-axis
+        a = scan_data[270 + theta] # distance at theta
+        alpha = atan((a*cos(theta))-b, a*sin(theta)) # offset of the car: should be zero if car is straight
+        D = b*cos(theta) # current distance between the car and the right wall
+        D_new = D + (L*sin(alpha)) # future projectd distance
+
+        # Control algorithm
+        error = 1000 - D_new
+        integral += error
+        derivative = error - pre_error
+        pre_error = error
+        control = (kp*error) + (ki*integral) + k(kd*derivative)
+
+        servo7.angle = 86.5 + control
+        car_angle = servo7.angle
+
+        # changing the speed of the car to slow down as the turn angle increases  
+        if (76.5 <= car_angle <= 86.5):
+            Motor_Speed(pca, 0.2)
+        elif (66.5 < car_angle < 76.5):
+            Motor_Speed(pca, 0.18)
+        elif (car_angle <= 66.5):
+            Motor_Speed(pca,0.15)
+        else:
             Motor_Speed(pca,0)
-            if angle==270 and 1<distance<=600:
-                servo7.angle = 95
-                print(f'too close: {distance}')
-                print('too close')
-            elif angle==270 and 1200<distance<2000:
-                servo7.angle = 75
-                print(f'too far:{distance}')
-                print('too far')
-            elif angle==270 and 600<=distance<=1200:
-                servo7.angle = 86.5
-                print(f'just right:{distance}')
-                print('just right')
-            elif (angle== 270 and distance > 3000): # or (angle == 280 and distance <1000):
-                for x in range (60, 87):
-                    servo7.angle = x
-                    time.sleep(0.1)
-                    print(f'turn:{distance}')
-                    print('turn')
-      #      elif angle==190 and distance < 100:
-      #          Motor_Speed(pca,0)
-#                servo7.angle = 87
-                #print('This is 90')
-                #radians = angle * pi / 180.0
-                #x = distance * cos(radians)
-                #y = distance * sin(radians)
-#                print(f'Angle: {angle}, Distance: {distance}, (x, y): ({x:.2f}, {y:.2f})')
-                f.write(f'Angle: {angle}, Distance: {distance}\n')
 
 scan_data = [0]*360
 
@@ -65,7 +67,7 @@ try:
     for scan in lidar.iter_scans():
         for (_, angle, distance) in scan:
             scan_data[min([359, floor(angle)])] = distance
-        print_lidar_data(scan_data)
+        all_sensors(scan_data)
 
 except KeyboardInterrupt:
     print('Stopping.')
