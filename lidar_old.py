@@ -30,18 +30,9 @@ def print_lidar_data(data):
     with open('lidarreadings.txt', 'w') as f:
         for angle, distance in enumerate(data):
             Motor_Speed(pca,0)
-            if angle==270 and 1<distance<=600:
-                servo7.angle = 95
-                print(f'too close: {distance}')
-                print('too close')
-            elif angle==270 and 1200<distance<2000:
-                servo7.angle = 75
-                print(f'too far:{distance}')
-                print('too far')
-            elif angle==270 and 600<=distance<=1200:
-                servo7.angle = 86.5
-                print(f'just right:{distance}')
-                print('just right')
+            if angle==270:
+                error=500-distance
+                servo7.angle = 86.5 + error
             elif (angle== 270 and distance > 3000): # or (angle == 280 and distance <1000):
                 for x in range (60, 87):
                     servo7.angle = x
