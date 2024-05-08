@@ -21,7 +21,7 @@ def talker():
 
     ret, frame = cap.read()                               # take frame 
     cap.release()
-    
+
     while not rospy.is_shutdown():
         if ret:
             cv2.imwrite("ROS_PIC.jpg", frame)             # Save the frame to a file
@@ -36,10 +36,3 @@ if __name__ == '__main__':
         talker()
     except rospy.ROSInterruptException:
         pass
-
-
-
-
-
-
-
