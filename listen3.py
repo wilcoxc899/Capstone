@@ -97,9 +97,9 @@ def call_imu(data):
     #print(f'{az}')
     setpoint=0
     # PID Parameters
-    p=0.005
-    i=0.001
-    #d=0.02
+    p=1.0
+    i=0.15
+    d=0.02
     dummy = 86
     global status
     if (status == 0 or status == 2):
